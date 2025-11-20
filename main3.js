@@ -1,4 +1,4 @@
-import { BattleSystem } from "../deck-realms-battle-system/modules/BattleSystem.js";
+import { BattleSystem } from "./modules/BattleSystem.js";
 import { RowHandEvaluator } from "../deck-realms-battle-system/modules/RowHandEvaluator.js";
 import { applyLayoutConfig } from "../deck-realms-battle-system/modules/LayoutConfig.js";
 
