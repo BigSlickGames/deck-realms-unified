@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Battle System</title>
+    <link rel="stylesheet" href="styles3.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div id="battleSystem" class="game-system active">
+        <div class="battle-interface">
+          <div class="battle-header">
+            <h2>⚔️ Battle Arena</h2>
+            <div class="battle-status">Ready for Combat</div>
+          </div>
+
+          <div class="battle-layout">
+            <!-- Battle Setup Panel -->
+            <div class="battle-setup-panel">
+              <!-- Top Window - Enemy Deck -->
+              <div class="setup-window top-window">
+                <div class="deck-display enemy-deck">
+                  <div class="deck-stack">
+                    <div class="deck-card"></div>
+                    <div class="deck-card"></div>
+                    <div class="deck-card"></div>
+                  </div>
+                </div>
+                <!-- Enemy Stats -->
+                <div class="stats-panel enemy-stats-panel">
+                  <div class="stats-header">
+                    <h3>📊 Enemy Stats</h3>
+                  </div>
+                  <div class="stats-content" id="enemyStatsContent">
+                    <div class="stat-item">
+                      <span class="stat-label">Best Hand:</span>
+                      <span class="stat-value" id="enemyBestHand">-</span>
+                    </div>
+                    <div class="stat-item">
+                      <span class="stat-label">Damage Dealt:</span>
+                      <span class="stat-value" id="enemyDamageDealt">0</span>
+                    </div>
+                    <div class="stat-item">
+                      <span class="stat-label">Damage Taken:</span>
+                      <span class="stat-value" id="enemyDamageTaken">0</span>
+                    </div>
+                    <div class="stat-item">
+                      <span class="stat-label">Cards Destroyed:</span>
+                      <span class="stat-value" id="enemyCardsDestroyed">0</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-section-title">Hands Formed</div>
+                    <div class="hands-formed" id="enemyHandsFormed">
+                      <div class="stat-item-small">No hands yet</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom Window - Player Deck -->
+              <div class="setup-window bottom-window">
+                <div class="deck-display player-deck">
+                  <button id="summonFactionBtn" class="summon-faction-btn">
+                    <span class="summon-text">Summon Faction</span>
+                  </button>
+                  <div class="deck-stack hidden">
+                    <div class="deck-card"></div>
+                    <div class="deck-card"></div>
+                    <div class="deck-card"></div>
+                  </div>
+                </div>
+                <!-- Player Stats -->
+                <div class="stats-panel player-stats-panel">
+                  <div class="stats-header">
+                    <h3>📊 Player Stats</h3>
+                  </div>
+                  <div class="stats-content" id="playerStatsContent">
+                    <div class="stat-item">
+                      <span class="stat-label">Best Hand:</span>
+                      <span class="stat-value" id="playerBestHand">-</span>
+                    </div>
+                    <div class="stat-item">
+                      <span class="stat-label">Damage Dealt:</span>
+                      <span class="stat-value" id="playerDamageDealt">0</span>
+                    </div>
+                    <div class="stat-item">
+                      <span class="stat-label">Damage Taken:</span>
+                      <span class="stat-value" id="playerDamageTaken">0</span>
+                    </div>
+                    <div class="stat-item">
+                      <span class="stat-label">Cards Destroyed:</span>
+                      <span class="stat-value" id="playerCardsDestroyed"
+                        >0</span
+                      >
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-section-title">Hands Formed</div>
+                    <div class="hands-formed" id="playerHandsFormed">
+                      <div class="stat-item-small">No hands yet</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Coin Flip Modal -->
+            <div id="coinFlipModal" class="coin-flip-modal hidden">
+              <div class="coin-flip-overlay"></div>
+              <div class="coin-flip-content">
+                <h2 class="coin-flip-title">Who Goes First?</h2>
+                <p class="coin-flip-subtitle">Choose your suit and call it!</p>
+
+                <div class="coin-container">
+                  <div id="spinningCoin" class="spinning-coin">
+                    <div class="coin-side spade-side">♠</div>
+                    <div class="coin-side heart-side">♥</div>
+                  </div>
+                </div>
+
+                <div id="coinFlipChoices" class="coin-flip-choices">
+                  <button class="coin-choice-btn spade-btn" data-choice="spade">
+                    <span class="choice-icon">♠</span>
+                    <span class="choice-label">Spades</span>
+                  </button>
+                  <button class="coin-choice-btn heart-btn" data-choice="heart">
+                    <span class="choice-icon">♥</span>
+                    <span class="choice-label">Hearts</span>
+                  </button>
+                </div>
+
+                <div id="coinFlipResult" class="coin-flip-result hidden">
+                  <div class="result-message" id="resultMessage"></div>
+                  <div class="turn-choices hidden" id="turnChoices">
+                    <p class="turn-prompt">You won! Who goes first?</p>
+                    <button
+                      class="turn-choice-btn player-first-btn"
+                      data-turn="player"
+                    >
+                      <span class="turn-icon">👤</span>
+                      <span class="turn-label">I'll Go First</span>
+                    </button>
+                    <button
+                      class="turn-choice-btn enemy-first-btn"
+                      data-turn="enemy"
+                    >
+                      <span class="turn-icon">🤖</span>
+                      <span class="turn-label">Opponent Goes First</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Battlefield -->
+            <div class="battlefield-container">
+              <div class="battlefield">
+                <!-- Enemy Side -->
+                <div class="battle-side enemy-side" id="enemySide">
+                  <div class="battle-rows">
+                    <!-- Enemy Back Row (5 slots) -->
+                    <div
+                      class="battle-row back-row"
+                      data-side="enemy"
+                      data-row="back"
+                    >
+                      <div
+                        class="card-slot"
+                        data-side="enemy"
+                        data-row="back"
+                        data-slot="0"
+                      ></div>
+                      <div
+                        class="card-slot"
+                        data-side="enemy"
+                        data-row="back"
+                        data-slot="1"
+                      ></div>
+                      <div
+                        class="card-slot"
+                        data-side="enemy"
+                        data-row="back"
+                        data-slot="2"
+                      ></div>
+                      <div
+                        class="card-slot"
+                        data-side="enemy"
+                        data-row="back"
+                        data-slot="3"
+                      ></div>
+                      <div
+                        class="card-slot"
+                        data-side="enemy"
+                        data-row="back"
+                        data-slot="4"
+                      ></div>
+                      <div
+                        class="hand-stamp"
+                        data-side="enemy"
+                        data-row="back"
+                      ></div>
+                    </div>
+
+                    <!-- Enemy Mid Row (2-3-3-2) -->
+                    <div
+                      class="battle-row mid-row"
+                      data-side="enemy"
+                      data-row="mid"
+                    >
+                      <div class="mid-group group-2">
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="mid"
+                          data-slot="0"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="mid"
+                          data-slot="1"
+                        ></div>
+                      </div>
+                      <div class="mid-group group-3">
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="mid"
+                          data-slot="2"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="mid"
+                          data-slot="3"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="mid"
+                          data-slot="4"
+                        ></div>
+                      </div>
+                      <div class="mid-group group-3">
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="mid"
+                          data-slot="5"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="mid"
+                          data-slot="6"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="mid"
+                          data-slot="7"
+                        ></div>
+                      </div>
+                      <div class="mid-group group-2">
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="mid"
+                          data-slot="8"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="mid"
+                          data-slot="9"
+                        ></div>
+                      </div>
+                      <div
+                        class="hand-stamp"
+                        data-side="enemy"
+                        data-row="mid"
+                      ></div>
+                    </div>
+
+                    <!-- Enemy Front Row (2-1-1-2) -->
+                    <div
+                      class="battle-row front-row"
+                      data-side="enemy"
+                      data-row="front"
+                    >
+                      <div class="front-group group-2">
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="front"
+                          data-slot="0"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="front"
+                          data-slot="1"
+                        ></div>
+                      </div>
+                      <div class="front-group group-1">
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="front"
+                          data-slot="2"
+                        ></div>
+                      </div>
+                      <div class="front-group group-1">
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="front"
+                          data-slot="3"
+                        ></div>
+                      </div>
+                      <div class="front-group group-2">
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="front"
+                          data-slot="4"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="enemy"
+                          data-row="front"
+                          data-slot="5"
+                        ></div>
+                      </div>
+                      <div
+                        class="hand-stamp"
+                        data-side="enemy"
+                        data-row="front"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Battle Line -->
+                <div class="board-center">
+                  <div class="center-combat-score">
+                    <div class="combat-score-display">
+                      <div class="player-hp-display">
+                        <span class="hp-label">Player</span>
+                        <span class="hp-value" id="playerHPCenter">100</span>
+                      </div>
+                      <div class="score-divider">VS</div>
+                      <div class="enemy-hp-display">
+                        <span class="hp-label">Enemy</span>
+                        <span class="hp-value" id="enemyHPCenter">100</span>
+                      </div>
+                    </div>
+                    <div class="round-info-display">
+                      <span class="round-label">Round</span>
+                      <span class="round-value" id="roundNumberCenter">-</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Player Side -->
+                <div class="battle-side player-side" id="playerSide">
+                  <div class="battle-rows">
+                    <!-- Player Front Row (2-1-1-2) -->
+                    <div
+                      class="battle-row front-row"
+                      data-side="player"
+                      data-row="front"
+                    >
+                      <div class="front-group group-2">
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="front"
+                          data-slot="0"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="front"
+                          data-slot="1"
+                        ></div>
+                      </div>
+                      <div class="front-group group-1">
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="front"
+                          data-slot="2"
+                        ></div>
+                      </div>
+                      <div class="front-group group-1">
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="front"
+                          data-slot="3"
+                        ></div>
+                      </div>
+                      <div class="front-group group-2">
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="front"
+                          data-slot="4"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="front"
+                          data-slot="5"
+                        ></div>
+                      </div>
+                      <div
+                        class="hand-stamp"
+                        data-side="player"
+                        data-row="front"
+                      ></div>
+                    </div>
+
+                    <!-- Player Mid Row (2-3-3-2) -->
+                    <div
+                      class="battle-row mid-row"
+                      data-side="player"
+                      data-row="mid"
+                    >
+                      <div class="mid-group group-2">
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="mid"
+                          data-slot="0"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="mid"
+                          data-slot="1"
+                        ></div>
+                      </div>
+                      <div class="mid-group group-3">
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="mid"
+                          data-slot="2"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="mid"
+                          data-slot="3"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="mid"
+                          data-slot="4"
+                        ></div>
+                      </div>
+                      <div class="mid-group group-3">
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="mid"
+                          data-slot="5"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="mid"
+                          data-slot="6"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="mid"
+                          data-slot="7"
+                        ></div>
+                      </div>
+                      <div class="mid-group group-2">
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="mid"
+                          data-slot="8"
+                        ></div>
+                        <div
+                          class="card-slot"
+                          data-side="player"
+                          data-row="mid"
+                          data-slot="9"
+                        ></div>
+                      </div>
+                      <div
+                        class="hand-stamp"
+                        data-side="player"
+                        data-row="mid"
+                      ></div>
+                    </div>
+
+                    <!-- Player Back Row (5 slots) -->
+                    <div
+                      class="battle-row back-row"
+                      data-side="player"
+                      data-row="back"
+                    >
+                      <div
+                        class="card-slot"
+                        data-side="player"
+                        data-row="back"
+                        data-slot="0"
+                      ></div>
+                      <div
+                        class="card-slot"
+                        data-side="player"
+                        data-row="back"
+                        data-slot="1"
+                      ></div>
+                      <div
+                        class="card-slot"
+                        data-side="player"
+                        data-row="back"
+                        data-slot="2"
+                      ></div>
+                      <div
+                        class="card-slot"
+                        data-side="player"
+                        data-row="back"
+                        data-slot="3"
+                      ></div>
+                      <div
+                        class="card-slot"
+                        data-side="player"
+                        data-row="back"
+                        data-slot="4"
+                      ></div>
+                      <div
+                        class="hand-stamp"
+                        data-side="player"
+                        data-row="back"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Player Hand -->
+              <div class="player-hand" id="playerHand">
+                <div class="hand-cards" id="handCards">
+                  <!-- Cards will be dealt here -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Battle Log Container -->
+            <div class="battle-log-container">
+              <!-- Start Battle Button -->
+              <button id="startBattleBtn" class="start-battle-btn" disabled>
+                START BATTLE
+              </button>
+
+              <!-- Battle Log Panel -->
+              <div class="battle-log-panel">
+                <div class="log-header">
+                  <h3>📜 Battle Log</h3>
+                </div>
+                <div class="log-content" id="battleLogContent">
+                  <div class="log-entry">
+                    <span class="log-time">Ready</span>
+                    <span class="log-message">Awaiting battle commands...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Game End Modal -->
+            <div id="gameEndModal" class="game-end-modal hidden">
+              <div class="game-end-overlay"></div>
+              <div class="game-end-content">
+                <div class="game-end-icon" id="gameEndIcon"></div>
+                <h2 class="game-end-title" id="gameEndTitle"></h2>
+                <p class="game-end-message">Find another player to battle?</p>
+                <div class="game-end-actions">
+                  <button class="game-end-btn yes-btn" id="playAgainBtn">
+                    Yes
+                  </button>
+                  <button class="game-end-btn no-btn" id="exitGameBtn">
+                    No
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="main3.js"></script>
+  </body>
+</html>

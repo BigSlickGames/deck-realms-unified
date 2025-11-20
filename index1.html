@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deck Realms - Card Manager</title>
+    <link rel="stylesheet" href="styles1.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div id="gameInterface" class="game-interface">
+        <!-- Global Header -->
+        <div class="global-header">
+          <div class="header-left">
+            <img
+              src="public/design_me_a_modern_logo_for_a_card_battle_game_called__Deck_Realms_-_Factions_at_WAR_i_want_the_text-removebg-preview (1).png"
+              alt="Deck Realms"
+              class="header-logo"
+            />
+            <h1 class="game-title-header">Deck Realms</h1>
+          </div>
+
+          <div class="header-center">
+            <h2 style="color: white; margin: 0">Card Manager</h2>
+          </div>
+
+          <div class="header-right">
+            <div class="player-profile">
+              <div class="profile-avatar">
+                <span class="level-badge">12</span>
+              </div>
+              <div class="profile-info">
+                <div class="player-name">Commander</div>
+                <div class="player-stats">
+                  <span class="bankroll">250,000</span>
+                  <span class="xp">13,045 XP</span>
+                </div>
+              </div>
+              <button id="shopBtn" class="shop-btn">Shop</button>
+            </div>
+          </div>
+        </div>
+        <button id="exploreBtn" class="explore-btn">Explore</button>
+        <button id="startBattleBtn" class="start-battle-btn">
+          Start Battle
+        </button>
+
+        <!-- Battle Console Window -->
+        <div class="battle-console">
+          <div class="battle-console-header">
+            <span class="console-title">Battle Console</span>
+          </div>
+
+          <div class="console-content-grid">
+            <!-- Window 1: Battle Console - All Info -->
+            <div class="console-window console-window-main">
+              <div class="console-window-header">Battle Console</div>
+              <div class="console-window-content-compact">
+                <div class="console-compact-row">
+                  <span class="console-compact-label">Current Deck:</span>
+                  <span
+                    class="faction-indicator-compact"
+                    id="currentFactionIndicator"
+                    >HEARTS</span
+                  >
+                </div>
+                <div class="console-compact-row">
+                  <span class="console-compact-label">Ante Amount:</span>
+                  <div class="deck-ante-controls-compact">
+                    <button class="ante-btn-compact ante-down" id="anteDown">
+                      −
+                    </button>
+                    <span class="ante-value-compact" id="anteValue">1,000</span>
+                    <button class="ante-btn-compact ante-up" id="anteUp">
+                      +
+                    </button>
+                  </div>
+                </div>
+                <div class="console-compact-row">
+                  <span class="console-compact-label">Range:</span>
+                  <span class="console-compact-value">100 - 50,000</span>
+                </div>
+                <div class="console-divider-compact"></div>
+                <div class="console-compact-row">
+                  <span class="console-compact-label">Battle Ante:</span>
+                  <span
+                    class="console-compact-value-highlight"
+                    id="overallBattleAnte"
+                    >1,000</span
+                  >
+                </div>
+                <div class="console-divider-compact"></div>
+                <div class="console-compact-row">
+                  <span class="console-compact-label">Hearts:</span>
+                  <span
+                    class="console-compact-value-highlight"
+                    id="heartsAnteChip"
+                    >1,000</span
+                  >
+                </div>
+                <div class="console-compact-row">
+                  <span class="console-compact-label">Diamonds:</span>
+                  <span
+                    class="console-compact-value-highlight"
+                    id="diamondsAnteChip"
+                    >1,000</span
+                  >
+                </div>
+                <div class="console-compact-row">
+                  <span class="console-compact-label">Clubs:</span>
+                  <span
+                    class="console-compact-value-highlight"
+                    id="clubsAnteChip"
+                    >1,000</span
+                  >
+                </div>
+                <div class="console-compact-row">
+                  <span class="console-compact-label">Spades:</span>
+                  <span
+                    class="console-compact-value-highlight"
+                    id="spadesAnteChip"
+                    >1,000</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Window 2: Empty -->
+            <div class="console-window">
+              <div class="console-window-header">Window 2</div>
+              <div class="console-window-content">
+                <div class="console-row-centered"></div>
+              </div>
+            </div>
+
+            <!-- Window 3: Empty -->
+            <div class="console-window">
+              <div class="console-window-header">Window 3</div>
+              <div class="console-window-content">
+                <div class="console-row-centered"></div>
+              </div>
+            </div>
+
+            <!-- Window 4: Market -->
+            <div class="console-window">
+              <div class="console-window-header">Trade Market</div>
+              <div
+                class="console-window-content"
+                data-window="4"
+                id="marketWindow"
+              >
+                <div class="console-row-centered">Loading market...</div>
+              </div>
+            </div>
+
+            <!-- Window 5: Card Shop -->
+            <div class="console-window">
+              <div class="console-window-header">Card Shop</div>
+              <div class="console-window-content-shop">
+                <button id="consoleBuySingleBtn" class="console-buy-btn-shop">
+                  Buy Single (1,000)
+                </button>
+                <button id="consoleBuy5Btn" class="console-buy-btn-shop">
+                  Buy 5 (5,000)
+                </button>
+                <button id="consoleBuy10Btn" class="console-buy-btn-shop">
+                  Buy 10 (10,000)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deck Management System -->
+        <div id="manageSystem" class="game-system active">
+          <video
+            id="heartsBackgroundVideo"
+            class="faction-background-video hearts-bg hidden"
+            autoplay
+            loop
+            muted
+            playsinline
+          >
+            <source src="public/king-of-hearts.mp4" type="video/mp4" />
+          </video>
+          <video
+            id="diamondsBackgroundVideo"
+            class="faction-background-video diamonds-bg hidden"
+            autoplay
+            loop
+            muted
+            playsinline
+          >
+            <source src="public/queen-of-diamonds.mp4" type="video/mp4" />
+          </video>
+          <video
+            id="clubsBackgroundVideo"
+            class="faction-background-video clubs-bg hidden"
+            autoplay
+            loop
+            muted
+            playsinline
+          >
+            <source src="public/walking-background.mp4" type="video/mp4" />
+          </video>
+          <video
+            id="spadesBackgroundVideo"
+            class="faction-background-video spades-bg hidden"
+            autoplay
+            loop
+            muted
+            playsinline
+          >
+            <source src="public/king-of-spades copy.mp4" type="video/mp4" />
+          </video>
+          <div class="manage-interface">
+            <div class="manage-header">
+              <div class="header-spacer"></div>
+              <div class="faction-selector-center">
+                <select id="factionSelect" class="faction-dropdown">
+                  <option value="HEARTS">Hearts (0/52)</option>
+                  <option value="DIAMONDS">Diamonds (0/52)</option>
+                  <option value="CLUBS">Clubs (0/52)</option>
+                  <option value="SPADES">Spades (0/52)</option>
+                </select>
+              </div>
+              <div class="header-spacer"></div>
+            </div>
+
+            <div class="manage-layout">
+              <!-- Current Deck Panel -->
+              <div class="deck-panel">
+                <div class="panel-header">
+                  <div class="panel-title">
+                    <h3 id="currentFactionTitle">Hearts Deck</h3>
+                  </div>
+                  <div class="panel-stats">
+                    <span class="deck-count" id="deckCount">0/52</span>
+                    <div class="completion-bar">
+                      <div class="completion-fill" id="completionFill"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-content">
+                  <div class="deck-grid" id="currentDeck">
+                    <!-- Deck cards will be populated here -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card Details Panel -->
+              <div class="details-panel" id="detailsPanel">
+                <video
+                  class="faction-idle-video hearts-idle hidden"
+                  autoplay
+                  loop
+                  muted
+                  playsinline
+                >
+                  <source src="public/king-of-hearts.mp4" type="video/mp4" />
+                </video>
+                <video
+                  class="faction-idle-video diamonds-idle hidden"
+                  autoplay
+                  loop
+                  muted
+                  playsinline
+                >
+                  <source src="public/queen-of-diamonds.mp4" type="video/mp4" />
+                </video>
+                <video
+                  class="faction-idle-video clubs-idle hidden"
+                  autoplay
+                  loop
+                  muted
+                  playsinline
+                >
+                  <source
+                    src="public/clubs-idle-animation.mp4"
+                    type="video/mp4"
+                  />
+                </video>
+                <video
+                  class="faction-idle-video spades-idle hidden"
+                  autoplay
+                  loop
+                  muted
+                  playsinline
+                >
+                  <source
+                    src="public/king-of-spades copy.mp4"
+                    type="video/mp4"
+                  />
+                </video>
+                <div class="panel-header">
+                  <div class="panel-title">
+                    <h3>Card Details</h3>
+                  </div>
+                </div>
+                <div class="panel-content">
+                  <div id="selectedCardStats" class="card-details-view">
+                    <div class="no-selection">
+                      <h4>Select a Card</h4>
+                      <p>Click on any card to view detailed information</p>
+                    </div>
+                  </div>
+                  <div
+                    class="card-actions"
+                    id="cardActions"
+                    style="display: none"
+                  >
+                    <button id="moveToDeckBtn" class="action-btn primary">
+                      Add to Deck
+                    </button>
+                    <button
+                      id="moveToCollectionBtn"
+                      class="action-btn secondary"
+                    >
+                      Remove from Deck
+                    </button>
+                    <button id="promoteCardBtn" class="action-btn special">
+                      Promote
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Collection Panel -->
+              <div class="collection-panel">
+                <div class="panel-header">
+                  <div class="panel-title">
+                    <h3>Collection</h3>
+                  </div>
+                  <div class="panel-controls">
+                    <select id="sortFilter" class="sort-select">
+                      <option value="rank">By Rank</option>
+                      <option value="council">By Council</option>
+                      <option value="promotion">By Stars</option>
+                      <option value="xp">By XP</option>
+                    </select>
+                    <button id="addAllCardsBtn" class="add-all-btn">
+                      Select All
+                    </button>
+                    <button id="generateCardsBtn" class="generate-btn">
+                      <span class="btn-icon">+</span>
+                      Generate
+                    </button>
+                  </div>
+                </div>
+                <div class="panel-content">
+                  <div class="collection-grid" id="cardCollection">
+                    <!-- Collection cards will be populated here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shop Modal -->
+      <div id="shopModal" class="modal-overlay hidden">
+        <div class="modal-content shop-modal">
+          <div class="modal-header">
+            <h2>Card Shop</h2>
+            <button id="closeShopBtn" class="close-btn">×</button>
+          </div>
+          <div class="modal-body">
+            <div class="pack-offer">
+              <div class="pack-visual">
+                <div class="pack-icon"></div>
+                <div class="pack-glow"></div>
+              </div>
+              <div class="pack-info">
+                <h3>Booster Pack</h3>
+                <p>10 Random Cards for selected faction</p>
+                <div class="pack-price">5,000 chips</div>
+              </div>
+              <button id="buyPackBtn" class="buy-pack-btn">Buy Pack</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pack Opening Modal -->
+      <div id="packOpeningModal" class="modal-overlay hidden">
+        <div class="pack-opening-container">
+          <div class="pack-opening-stage" id="packOpeningStage">
+            <div class="card-pack" id="cardPack">
+              <div class="pack-wrapper">
+                <div class="pack-front">
+                  <div class="pack-logo">DECK REALMS</div>
+                  <div class="pack-shine"></div>
+                </div>
+              </div>
+              <div class="pack-tap-hint">TAP TO OPEN</div>
+            </div>
+
+            <div class="card-reveal-grid hidden" id="cardRevealGrid"></div>
+
+            <button id="packDoneBtn" class="pack-done-btn hidden">
+              Collect Cards
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="main1.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const exploreBtn = document.getElementById("exploreBtn");
+        if (exploreBtn) {
+          exploreBtn.onclick = () => {
+            window.location.href = "index2.html";
+          };
+        }
+        const startBattleBtn = document.getElementById("startBattleBtn");
+        if (startBattleBtn) {
+          startBattleBtn.onclick = () => {
+            window.location.href = "index3.html";
+          };
+        }
+      });
+    </script>
+  </body>
+</html>

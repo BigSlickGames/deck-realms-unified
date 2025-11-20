@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deck Realms - Explore</title>
+    <link rel="stylesheet" href="styles2.css" />
+    <!-- Maps API with async loading, no callback -->
+    <script
+      async
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&libraries=places"
+    ></script>
+  </head>
+  <body>
+    <div class="app">
+      <div id="gameInterface" class="game-interface">
+        <div class="global-header">
+          <div class="header-left">
+            <img
+              src="public/design_me_a_modern_logo_for_a_card_battle_game_called__Deck_Realms_-_Factions_at_WAR_i_want_the_text-removebg-preview (1).png"
+              alt="Deck Realms"
+              class="header-logo"
+            />
+            <h1 class="game-title-header">Deck Realms - Explore</h1>
+          </div>
+        </div>
+
+        <div id="exploreSystem" class="game-system active">
+          <div class="explore-interface">
+            <div class="explore-header">
+              <h2>🌐 Explore Mode</h2>
+              <div class="ar-status" id="arStatus">Offline</div>
+            </div>
+
+            <div class="explore-layout">
+              <div class="ar-viewport-container">
+                <div class="viewport-header">
+                  <div class="view-toggle">
+                    <button id="mapViewBtn" class="view-btn active">
+                      🗺️ Map
+                    </button>
+                    <button id="arViewBtn" class="view-btn">📱 AR</button>
+                  </div>
+                  <button id="fullscreenBtn" class="control-btn">⛶</button>
+                </div>
+
+                <div class="ar-viewport" id="arViewport">
+                  <div id="mapView" class="ar-view active">
+                    <div id="googleMap" class="google-map-container"></div>
+                    <div class="map-overlay-controls">
+                      <button class="map-control-btn" id="centerMapBtn">
+                        <span>📍</span> Center on Me
+                      </button>
+                      <button class="map-control-btn" id="toggleSpiresBtn">
+                        <span>🏛️</span> Show Spires
+                      </button>
+                    </div>
+                  </div>
+                  <div id="arView" class="ar-view">
+                    <div class="ar-camera-feed">
+                      <video id="arVideo" autoplay muted playsinline></video>
+                      <div class="ar-overlay">
+                        <div class="ar-crosshair">⊕</div>
+                        <div class="ar-scan-area">
+                          <div class="scan-corners">
+                            <div class="corner top-left"></div>
+                            <div class="corner top-right"></div>
+                            <div class="corner bottom-left"></div>
+                            <div class="corner bottom-right"></div>
+                          </div>
+                          <div class="scan-text">Point camera at QR code</div>
+                        </div>
+                        <div class="ar-hud">
+                          <div class="hud-item">
+                            <span class="hud-label">Nearest Spire</span>
+                            <span class="hud-value" id="nearestSpire"
+                              >Scanning...</span
+                            >
+                          </div>
+                          <div class="hud-item">
+                            <span class="hud-label">Distance</span>
+                            <span class="hud-value" id="spireDistance"
+                              >---</span
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="explore-controls-panel">
+                <div class="controls-header">
+                  <h3>🎮 AR Controls</h3>
+                </div>
+                <div class="controls-content">
+                  <button id="enableArBtn" class="ar-btn primary">
+                    🚀 Enable AR Mode
+                  </button>
+                  <button id="scanQrBtn" class="ar-btn secondary" disabled>
+                    📷 Scan QR Code
+                  </button>
+                  <button id="testSpawnBtn" class="ar-btn test">
+                    🎲 Test Spawn Card
+                  </button>
+                  <button id="setCenterBtn" class="ar-btn secondary">
+                    📍 Set Center Location
+                  </button>
+                </div>
+                <div class="controls-header" style="margin-top: 20px">
+                  <h3>🗄️ Database</h3>
+                </div>
+                <div class="controls-content">
+                  <button id="generateCardsBtn" class="ar-btn primary">
+                    ✨ Generate 10K Cards
+                  </button>
+                  <button id="clearCardsBtn" class="ar-btn secondary">
+                    🗑️ Clear All Cards
+                  </button>
+                  <button id="loadNearbyBtn" class="ar-btn secondary">
+                    🔄 Reload Nearby
+                  </button>
+                  <div
+                    id="cardStats"
+                    style="
+                      margin-top: 12px;
+                      padding: 12px;
+                      background: rgba(255, 255, 255, 0.05);
+                      border-radius: 8px;
+                      font-size: 0.9rem;
+                    "
+                  >
+                    <div>
+                      Total Cards: <span id="totalCards">Loading...</span>
+                    </div>
+                    <div>Nearby Cards: <span id="nearbyCards">0</span></div>
+                    <div>Collected: <span id="collectedCards">0</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="spire-info-panel">
+                <div class="panel-header">
+                  <h3>🏛️ Nearby Spires</h3>
+                </div>
+                <div class="spire-list" id="spireList">
+                  <div class="spire-item hearts-spire">
+                    <div class="spire-icon">♥</div>
+                    <div class="spire-details">
+                      <span class="spire-name">Crimson Spire</span>
+                      <span class="spire-faction">Hearts Faction</span>
+                    </div>
+                    <span class="spire-distance">Locating...</span>
+                  </div>
+                  <div class="spire-item diamonds-spire">
+                    <div class="spire-icon">♦</div>
+                    <div class="spire-details">
+                      <span class="spire-name">Golden Spire</span>
+                      <span class="spire-faction">Diamonds Faction</span>
+                    </div>
+                    <span class="spire-distance">Locating...</span>
+                  </div>
+                  <div class="spire-item clubs-spire">
+                    <div class="spire-icon">♣</div>
+                    <div class="spire-details">
+                      <span class="spire-name">Shadow Spire</span>
+                      <span class="spire-faction">Clubs Faction</span>
+                    </div>
+                    <span class="spire-distance">Locating...</span>
+                  </div>
+                  <div class="spire-item spades-spire">
+                    <div class="spire-icon">♠</div>
+                    <div class="spire-details">
+                      <span class="spire-name">Iron Spire</span>
+                      <span class="spire-faction">Spades Faction</span>
+                    </div>
+                    <span class="spire-distance">Locating...</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ar-stats-panel">
+                <div class="panel-header">
+                  <h3>📊 Exploration Stats</h3>
+                </div>
+                <div class="stats-grid">
+                  <div class="stat-item">
+                    <span class="stat-label">Cards Found</span>
+                    <span class="stat-value" id="arCardsFound">0</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">Spires Visited</span>
+                    <span class="stat-value" id="spiresVisited">0</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">Rare Cards</span>
+                    <span class="stat-value" id="rareCardsFound">0</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">Success Rate</span>
+                    <span class="stat-value" id="scanSuccessRate">0%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="main2.js"></script>
+  </body>
+</html>
