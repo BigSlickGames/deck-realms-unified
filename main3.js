@@ -1,6 +1,6 @@
 import { BattleSystem } from "./modules/BattleSystem.js";
-import { RowHandEvaluator } from "../deck-realms-battle-system/modules/RowHandEvaluator.js";
-import { applyLayoutConfig } from "../deck-realms-battle-system/modules/LayoutConfig.js";
+import { RowHandEvaluator } from "./modules/RowHandEvaluator.js";
+import { applyLayoutConfig } from "./modules/LayoutConfig.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   applyLayoutConfig();
