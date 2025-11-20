@@ -1,4 +1,4 @@
-import { DeckManager } from "./DeckManager.js";
+import { DeckManager } from "./modules/DeckManager.js";
 import { DeckUI } from "../deck-realms-CMS/modules/DeckUI.js";
 import { MarketUI } from "../deck-realms-CMS/modules/MarketUI.js";
 
