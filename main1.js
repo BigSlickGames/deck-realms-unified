@@ -39,35 +39,50 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (consoleBuySingleBtn) {
     consoleBuySingleBtn.addEventListener("click", () => {
+      console.log("Buy Single clicked");
       const result = packOpening.buyCards(1);
       if (!result.success) {
         alert(result.message);
+      } else {
+        console.log("Purchase successful, cards:", result.cards);
       }
       deckUI.updatePlayerProfile();
       deckUI.updateCollectionDisplay();
     });
+  } else {
+    console.error("consoleBuySingleBtn not found");
   }
 
   if (consoleBuy5Btn) {
     consoleBuy5Btn.addEventListener("click", () => {
+      console.log("Buy 5 clicked");
       const result = packOpening.buyCards(5);
       if (!result.success) {
         alert(result.message);
+      } else {
+        console.log("Purchase successful, cards:", result.cards);
       }
       deckUI.updatePlayerProfile();
       deckUI.updateCollectionDisplay();
     });
+  } else {
+    console.error("consoleBuy5Btn not found");
   }
 
   if (consoleBuy10Btn) {
     consoleBuy10Btn.addEventListener("click", () => {
+      console.log("Buy 10 clicked");
       const result = packOpening.buyCards(10);
       if (!result.success) {
         alert(result.message);
+      } else {
+        console.log("Purchase successful, cards:", result.cards);
       }
       deckUI.updatePlayerProfile();
       deckUI.updateCollectionDisplay();
     });
+  } else {
+    console.error("consoleBuy10Btn not found");
   }
 
   console.log("✅ Initialization complete");
