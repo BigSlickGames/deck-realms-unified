@@ -36,6 +36,7 @@
                   <span class="xp">13,045 XP</span>
                 </div>
               </div>
+              <button id="backBtn" class="shop-btn" style="margin-right: 10px;">Back</button>
               <button id="shopBtn" class="shop-btn">Shop</button>
             </div>
           </div>
@@ -421,6 +422,12 @@
         if (startBattleBtn) {
           startBattleBtn.onclick = () => {
             window.location.href = "index3.html";
+          };
+        }
+        const backBtn = document.getElementById("backBtn");
+        if (backBtn) {
+          backBtn.onclick = () => {
+            window.location.href = "index.html";
           };
         }
       });

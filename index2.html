@@ -23,6 +23,9 @@
             />
             <h1 class="game-title-header">Deck Realms - Explore</h1>
           </div>
+          <div class="header-right">
+            <button id="backBtn" class="shop-btn">Back</button>
+          </div>
         </div>
 
         <div id="exploreSystem" class="game-system active">
@@ -210,5 +213,15 @@
     </div>
 
     <script type="module" src="main2.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const backBtn = document.getElementById("backBtn");
+        if (backBtn) {
+          backBtn.onclick = () => {
+            window.location.href = "index1.html";
+          };
+        }
+      });
+    </script>
   </body>
 </html>

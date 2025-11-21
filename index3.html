@@ -11,6 +11,7 @@
       <div id="battleSystem" class="game-system active">
         <div class="battle-interface">
           <div class="battle-header">
+            <button id="backBtn" class="shop-btn" style="position: absolute; top: 20px; left: 20px;">Back</button>
             <h2>⚔️ Battle Arena</h2>
             <div class="battle-status">Ready for Combat</div>
           </div>
@@ -601,5 +602,15 @@
     </div>
 
     <script type="module" src="main3.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const backBtn = document.getElementById("backBtn");
+        if (backBtn) {
+          backBtn.onclick = () => {
+            window.location.href = "index1.html";
+          };
+        }
+      });
+    </script>
   </body>
 </html>
