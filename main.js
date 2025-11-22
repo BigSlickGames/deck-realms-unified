@@ -67,4 +67,16 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  if (enterDeckRealmsBtn) {
+    enterDeckRealmsBtn.addEventListener("click", () => {
+      window.location.href = "index1.html";
+    });
+  }
+
+  if (enterGameNowBtn) {
+    enterGameNowBtn.addEventListener("click", () => {
+      window.location.href = "index1.html";
+    });
+  }
 });

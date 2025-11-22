@@ -57,6 +57,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     setupDatabaseControls();
 
+    const backBtn = document.getElementById('backBtn');
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            window.location.href = 'index1.html';
+        });
+    }
+
     console.log('✅ Initialization complete');
 });
 

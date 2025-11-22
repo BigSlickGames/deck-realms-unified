@@ -761,4 +761,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal = document.getElementById("gameEndModal");
     modal.classList.add("hidden");
   });
+
+  const backBtn = document.getElementById('backBtn');
+  if (backBtn) {
+    backBtn.addEventListener('click', () => {
+      window.location.href = 'index1.html';
+    });
+  }
 });
